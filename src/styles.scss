@@ -1,1 +1,76 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "~font-awesome/css/font-awesome.css";
+
+@font-face {
+  font-family: "ProductSans-Black";
+
+  src: url("./assets/fonts/ProductSans-Black.ttf");
+}
+
+@font-face {
+  font-family: "ProductSans-BlackItalic";
+  src: url("./assets/fonts/ProductSans-BlackItalic.ttf");
+}
+
+@font-face {
+  font-family: "ProductSans-Light";
+  src: url("./assets/fonts/ProductSans-Light.ttf");
+}
+
+@font-face {
+  font-family: "ProductSans-Medium";
+
+  src: url("./assets/fonts/ProductSans-Medium.ttf");
+}
+
+@font-face {
+  font-family: "ProductSans-MediumItalic";
+  src: url("./assets/fonts/ProductSans-MediumItalic.ttf");
+}
+
+@font-face {
+  font-family: "ProductSans-Regular";
+  src: url("./assets/fonts/ProductSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "ProductSans-Thin";
+  src: url("./assets/fonts/ProductSans-Thin.ttf");
+}
+
+@font-face {
+  font-family: "ProductSans-ThinItalic";
+  src: url("./assets/fonts/ProductSans-ThinItalic.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: ProductSans-Regular;
+}
+
+#table {
+  //  @apply bg-green-50;
+
+  thead {
+    @apply text-ash-200;
+
+    th {
+      @apply px-6 align-middle border-b-2 border-solid py-3 text-xs border-l-0 border-r-0 text-ash-200  whitespace-nowrap font-semibold text-left;
+    }
+  }
+
+  tbody {
+    td {
+      @apply border-t-0 capitalize px-6 align-middle text-ash-600 font-normal  border-l-0 border-r-0 text-sm whitespace-nowrap p-4;
+
+      &.view {
+        @apply text-[11px] uppercase text-blue-400 font-bold;
+      }
+    }
+  }
+}

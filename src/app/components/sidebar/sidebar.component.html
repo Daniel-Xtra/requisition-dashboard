@@ -1,0 +1,49 @@
+<div
+  class="sidebar bg-green-800 overflow-y-auto max-[991.98px]:hidden block fixed min-[992px]:w-72 h-[100%] z-50 top-0 left-0"
+>
+  <button
+    type="button"
+    class="bg-white rounded-md closer p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-0 absolute right-2 top-2 max-[991.98px]:visible invisible"
+  >
+    <span class="sr-only">Close menu</span>
+
+    <svg
+      class="h-4 w-4"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      />
+    </svg>
+  </button>
+  <ul class="mt-[6rem]">
+    <li *ngFor="let menuItem of menuItems">
+      <a
+        class="text-white font-medium tracking-widest text-[14px] flex items-center justify-between py-3 px-4"
+        [routerLinkActive]="['active']"
+        [routerLink]="[menuItem.path]"
+      >
+        <div class="flex items-center gap-5">
+          <img [src]="menuItem.icon" />
+          <div>{{ menuItem.title }}</div>
+        </div>
+
+        <img
+          id="arrow"
+          *ngIf="menuItem.dropdown"
+          src="assets/icons/chevron-down.svg"
+        />
+      </a>
+    </li>
+  </ul>
+</div>
+<!-- <div
+  class="fixed top-0 left-0 w-full h-full md:hidden bg-black/50 z-10 sidebar-overlay"
+></div> -->

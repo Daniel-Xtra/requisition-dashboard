@@ -1,0 +1,175 @@
+<div class="w-full bg-green-400 h-screen">
+  <ng-container *ngIf="activePage === loginPages.LOGIN">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="login()"
+      class="m-auto px-12 py-10 top-0 left-0 right-0 bottom-0 absolute w-[450px] rounded-md shadow-xl bg-white h-max"
+    >
+      <legend class="capitalize text-base font-semibold text-green-950">
+        login to your account
+      </legend>
+      <div class="grid grid-cols-1 gap-x-6 gap-y-8 py-8">
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">email</label>
+          <div class="mt-2">
+            <input
+              type="email"
+              placeholder="Enter email"
+              formControlName="email"
+              class="block w-full form-control rounded-md border-0 py-2.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">password</label>
+          <div class="relative rounded-md shadow-sm mt-2">
+            <input
+              [type]="!passwordVisible ? 'password' : 'text'"
+              formControlName="password"
+              class="w-full form-control rounded-md border-0 py-2.5 pl-2 pr-10 text-gray-100 ring-1 ring-ash-200 placeholder:text-gray-100 outline-0 sm:text-sm sm:leading-6"
+              placeholder="Enter password"
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center mx-3">
+              <i
+                [class]="!passwordVisible ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                style="cursor: pointer"
+                (click)="togglePassword()"
+              ></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-1">
+          <button
+            type="submit"
+            class="rounded-md w-full bg-green-500 capitalize tracking-wider py-3 text-white font-normal text-base active:ring-2 active:ring-green-500 active:ring-offset-2"
+          >
+            login
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center text-xs justify-between">
+        <div>
+          Don`t have an account?
+          <span
+            class="text-[#3e933e] cursor-pointer font-medium"
+            (click)="goToRegister()"
+            >Register</span
+          >
+        </div>
+        <div
+          class="cursor-pointer text-[#76482c] font-medium"
+          (click)="pageChangeHandler(loginPages.FORGOT_PASSWORD)"
+        >
+          Forgot Password?
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <ng-container *ngIf="activePage === loginPages.FORGOT_PASSWORD">
+    <form
+      [formGroup]="resetForm"
+      (ngSubmit)="requestReset()"
+      class="m-auto px-12 py-10 top-0 left-0 right-0 bottom-0 absolute w-[450px] rounded-md shadow-xl bg-white h-max"
+    >
+      <legend
+        (click)="pageChangeHandler(loginPages.LOGIN)"
+        class="capitalize flex items-center gap-4 text-base font-semibold text-green-950"
+      >
+        <img src="assets/icons/back-greenl.svg" alt="" /> request reset
+      </legend>
+      <div class="grid grid-cols-1 gap-x-6 gap-y-8 py-8">
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">email</label>
+          <div class="mt-2">
+            <input
+              type="email"
+              placeholder="Enter email"
+              formControlName="email"
+              class="block w-full rounded-md border-0 py-2.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div class="col-span-1">
+          <button
+            class="rounded-md w-full bg-green-500 capitalize tracking-wider py-3 text-white font-normal text-base active:ring-2 active:ring-green-500 active:ring-offset-2"
+          >
+            send reset link
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <ng-container *ngIf="activePage === loginPages.VERIFY">
+    <figure
+      class="m-auto px-12 py-10 top-0 left-0 right-0 bottom-0 absolute w-[450px] rounded-md shadow-xl bg-white h-max"
+    >
+      <legend class="capitalize text-base font-semibold text-green-950">
+        reset password
+      </legend>
+      <div class="grid grid-cols-1 gap-x-6">
+        <div class="col-span-1">
+          <div class="text-sm py-5 w-full">
+            A verification code has been sent to your email address. Please
+            check your email and input the codes in the boxes provided below.
+          </div>
+          <ng-otp-input
+            (onInputChange)="onOtpChange($event)"
+            [config]="config"
+          ></ng-otp-input>
+          <p class="py-8 text-center text-xs">
+            Didn’t receive code?
+            <span
+              class="text-[#3e933e] capitalize cursor-pointer font-medium"
+              (click)="requestReset()"
+              >rescend code</span
+            >
+          </p>
+        </div>
+      </div>
+    </figure></ng-container
+  >
+  <ng-container *ngIf="activePage === loginPages.NEW_PASSWORD">
+    <form
+      [formGroup]="newPassForm"
+      (ngSubmit)="newPassword()"
+      class="m-auto px-12 py-10 top-0 left-0 right-0 bottom-0 absolute w-[450px] rounded-md shadow-xl bg-white h-max"
+    >
+      <legend class="capitalize text-base font-semibold text-green-950">
+        reset password
+      </legend>
+      <div class="grid grid-cols-1 gap-x-6 gap-y-8 py-8">
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">new password</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              placeholder="Enter new password"
+              formControlName="password"
+              class="block w-full rounded-md border-0 py-2.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">confirm new password</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              formControlName="password_confirmation"
+              class="w-full rounded-md border-0 py-2.5 pl-2 pr-10 text-gray-100 ring-1 ring-ash-200 placeholder:text-gray-100 outline-0 sm:text-sm sm:leading-6"
+              placeholder="Confirm new password"
+            />
+          </div>
+        </div>
+        <div class="col-span-1">
+          <button
+            type="submit"
+            class="rounded-md w-full bg-green-500 capitalize tracking-wider py-3 text-white font-normal text-base active:ring-2 active:ring-green-500 active:ring-offset-2"
+          >
+            reset password
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</div>

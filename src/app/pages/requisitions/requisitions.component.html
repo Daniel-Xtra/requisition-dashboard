@@ -1,0 +1,116 @@
+<div class="w-full">
+  <ng-container *ngIf="activePage === requisitionPages.REQUISITIONS">
+    <div class="w-full flex px-5 py-5 justify-end" id="table">
+      <div class="flex items-center gap-3">
+        <h3 class="normal-case tracking-wider font-semibold text-sm">
+          Filter by:
+        </h3>
+        <div>
+          <select
+            class="block w-full capitalize rounded-md border-0 px-2 py-2 text-ash-200 shadow-sm ring-1 ring-ash-200 outline-0 sm:text-sm sm:leading-6"
+          >
+            <option disabled selected>Select status</option>
+            <option *ngFor="let status of statuses" value="{{ status }}">
+              {{ status.replaceAll("_", " ") }}
+            </option>
+          </select>
+        </div>
+        <div class="flex items-center">
+          <input
+            type="text"
+            class="w-full text-center rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            placeholder="Start Date"
+            onclick="this.type='date'"
+            onblur="this.type='text'"
+          />
+          <hr class="w-12 mx-2 bg-red-950 text-red-950" />
+          <input
+            type="type"
+            class="w-full text-center rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            placeholder="End Date"
+            onclick="this.type='date'"
+            onblur="this.type='text'"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="w-full min-h-screen overflow-x-auto px-5 pt-8" id="table">
+      <table class="items-center bg-transparent w-full border-collapse">
+        <thead>
+          <tr>
+            <th>staff</th>
+            <th>Department</th>
+            <th>item</th>
+            <th>qty required</th>
+            <th>qty approved</th>
+            <th>qty issued</th>
+            <th>date requested</th>
+            <th>date approved</th>
+            <th>date issued</th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let requisition of requisitions">
+            <tr>
+              <td>
+                {{ requisition.user?.first_name }}
+              </td>
+              <td>{{ requisition.division?.abbreviation.toUpperCase() }}</td>
+              <td>{{ requisition.item }}</td>
+              <td>{{ requisition.qty_required }}</td>
+              <td>{{ requisition.qty_approved }}</td>
+              <td>{{ requisition.qty_issued }}</td>
+              <td>
+                {{
+                  requisition.created_at
+                    ? (requisition.created_at | timeago)
+                    : ""
+                }}
+              </td>
+              <td>
+                {{
+                  requisition.date_approved
+                    ? (requisition.date_approved | timeago)
+                    : ""
+                }}
+              </td>
+              <td>
+                {{
+                  requisition.date_issued
+                    ? (requisition.date_issued | timeago)
+                    : ""
+                }}
+              </td>
+              <td>
+                {{ requisition.status?.replaceAll("_", "    ").trim() }}
+              </td>
+            </tr>
+            <tr *ngIf="count <= 0" style="background: transparent">
+              <td colspan="9" class="text-center" style="border-bottom: none">
+                <div
+                  class="error mt-5"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                  "
+                >
+                  <img src="assets/imgs/empty_state.svg" />
+                  <h5 class="pt-4">
+                    no
+                    <!-- {{ sort_by !== "all" ? sort_by.replaceAll("_", "  ") : "" }} -->
+                    requisition found
+                  </h5>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+  <ng-container
+    *ngIf="activePage === requisitionPages.REQUISITION_DETAILS"
+  ></ng-container>
+</div>

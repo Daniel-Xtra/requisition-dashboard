@@ -1,0 +1,97 @@
+<nav class="bg-white border-gray py-2.5 shadow-lg">
+  <div class="flex flex-wrap items-center justify-between px-4 mx-auto">
+    <div class="flex gap-5 items-center">
+      <img
+        class="h-5 w-5 menu-toggler max-[991px]:block hidden"
+        src="assets/icons/menu.svg"
+      />
+    </div>
+    <h5 class="md:block hidden">{{ getTitle() }}</h5>
+    <div class="flex items-center justify-between gap-3">
+      <img class="h-5 w-5" src="assets/icons/notifications.svg" />
+      <!-- <img class="h-8 w-8" src="assets/icons/caret-down.svg" /> -->
+      <div class="relative inline-block text-left">
+        <div>
+          <img
+            (click)="dropdown()"
+            class="h-8 w-8"
+            src="assets/icons/caret-down.svg"
+          />
+          <!-- <button
+            type="button"
+            class="inline-flex w-full justify-center gap-x-1.5 px-3 py-2 text-sm font-semibold text-gray-900 "
+            id="menu-button"
+            aria-expanded="true"
+            aria-haspopup="true"
+          >
+            <svg
+              class="-mr-1 h-5 w-5 text-gray-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button> -->
+        </div>
+        <div
+          class="absolute subre right-0 z-10 mt-4 font-medium w-40 origin-top-right divide-y cursor-pointer divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="menu-button"
+          tabindex="-1"
+        >
+          <a
+            class="block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            id="menu-item-0"
+            >Profile</a
+          >
+          <a
+            class="block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            id="menu-item-1"
+            >Logs</a
+          >
+
+          <a
+            class="block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            id="menu-item-2"
+            >Change Password</a
+          >
+          <a
+            class="block px-4 text-[#DE350B] py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            id="menu-item-3"
+            (click)="logout()"
+            >Logout</a
+          >
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="block text-right">
+          <div class="text-black text-[14px] font-semibold capitalize">
+            {{ user()?.first_name + "  " + user()?.last_name }}
+          </div>
+          <div class="text-ash-50 text-[12px] capitalize">
+            {{ user()?.membership_type }}
+          </div>
+        </div>
+        <img
+          class="inline-block h-8 w-8 rounded-full ring-2 ring-offset-2 ring-gray-50 shrink-0"
+          src="assets/imgs/male-avatar.svg"
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
+</nav>

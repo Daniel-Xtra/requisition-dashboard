@@ -1,0 +1,17 @@
+.sidebar {
+  &.active {
+    display: block;
+    z-index: 1;
+  }
+}
+a.active {
+  background: rgb(251, 255, 246, 0.08);
+}
+
+li.group {
+  a.active {
+    // background-color: #0747a6;
+    background: rgb(251, 255, 246, 0.3);
+    overflow-x: hidden;
+  }
+}

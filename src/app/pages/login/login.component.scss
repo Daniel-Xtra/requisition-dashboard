@@ -1,0 +1,11 @@
+label {
+  @apply text-ash-200 font-semibold tracking-wider text-xs;
+}
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+  color: red;
+}
+
+input.ng-valid.ng-touched {
+  border: 1px solid green;
+}

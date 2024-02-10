@@ -1,0 +1,140 @@
+<div
+  class="w-full bg-green-400 py-6 place-items-center grid"
+  [style.min-height]="height + 'px'"
+>
+  <ng-container *ngIf="activePage === registerPages.REGISTER"
+    ><form
+      [formGroup]="registerForm"
+      (ngSubmit)="registerHandler()"
+      class="m-auto px-12 py-10 top-0 left-0 right-0 w-[500px] rounded-md shadow-xl bg-white h-max"
+    >
+      <legend class="capitalize text-base font-semibold text-green-950">
+        create an account
+      </legend>
+      <div class="grid grid-cols-2 gap-x-6 gap-y-6 py-8">
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">first name</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              placeholder="Enter firstname"
+              formControlName="first_name"
+              class="block w-full rounded-md border-0 py-2.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">last name</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              placeholder="Enter lastname"
+              formControlName="last_name"
+              class="block w-full rounded-md border-0 py-2.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-2">
+          <label class="block capitalize leading-6">email</label>
+          <div class="mt-2">
+            <input
+              type="email"
+              placeholder="Enter email"
+              formControlName="email"
+              class="block w-full rounded-md border-0 py-2.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">phone number</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              placeholder="Enter phone number"
+              formControlName="phone_number"
+              class="block w-full rounded-md border-0 py-2.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-1">
+          <label class="block capitalize leading-6">password</label>
+          <div class="relative rounded-md shadow-sm mt-2">
+            <input
+              [type]="passwordType"
+              class="w-full rounded-md border-0 py-2.5 pl-2 pr-10 text-gray-100 ring-1 ring-ash-200 placeholder:text-gray-100 outline-0 sm:text-sm sm:leading-6"
+              placeholder="Enter password"
+              formControlName="password"
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center mx-3">
+              <i
+                [class]="passwordIcon"
+                style="cursor: pointer"
+                (click)="hideShowPassword()"
+              ></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-2">
+          <label class="block normal-case font-medium leading-6"
+            >Department</label
+          >
+          <select
+            class="block w-full capitalize rounded-md border-0 px-2 py-3 mt-2 text-ash-200 shadow-sm ring-1 ring-ash-200 outline-0 sm:text-sm sm:leading-6"
+            formControlName="division"
+          >
+            <option disabled selected>Select department</option>
+            <option
+              *ngFor="let department of departments"
+              value="{{ department?.slug }}"
+            >
+              {{ department.name }}
+            </option>
+          </select>
+        </div>
+        <div class="col-span-2">
+          <button
+            type="submit"
+            class="rounded-md w-full bg-green-500 capitalize tracking-wider py-3 text-white font-normal text-base active:ring-2 active:ring-green-500 active:ring-offset-2"
+          >
+            register
+          </button>
+        </div>
+      </div>
+      <p class="my-0 text-center text-xs font-medium">
+        Already have an account?
+        <span class="text-[#3e933e] cursor-pointer capitalize" (click)="login()"
+          >login</span
+        >
+      </p>
+    </form>
+  </ng-container>
+  <ng-container *ngIf="activePage === registerPages.OTP">
+    <figure
+      class="m-auto px-12 py-10 top-0 left-0 right-0 bottom-0 absolute w-[450px] rounded-md shadow-xl bg-white h-max"
+    >
+      <legend class="capitalize text-base font-semibold text-green-950">
+        verify email
+      </legend>
+      <div class="grid grid-cols-1 gap-x-6">
+        <div class="col-span-1">
+          <div class="text-sm py-5 w-full">
+            A verification code has been sent to your email address. Please
+            check your email and input the codes in the boxes provided below.
+          </div>
+          <ng-otp-input
+            (onInputChange)="onOtpChange($event)"
+            [config]="config"
+          ></ng-otp-input>
+          <p class="py-8 text-center text-xs">
+            Didn’t receive code?
+            <span
+              class="text-[#3e933e] capitalize cursor-pointer font-medium"
+              (click)="requestReset()"
+              >rescend code</span
+            >
+          </p>
+        </div>
+      </div>
+    </figure>
+  </ng-container>
+</div>
