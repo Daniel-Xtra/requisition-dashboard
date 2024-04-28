@@ -1,18 +1,30 @@
-import { Component, OnInit, Signal, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Signal,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { Chart, registerables } from 'chart.js';
 import { ApiService } from 'src/app/services/api/api.service';
+import { TUser } from 'src/app/types/user';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
-  // user: TUser;
-
-  // user2 = signal<TUser>(null);
+  ict_pending = signal<number>(0);
+  store_pending = signal<number>(0);
+  issued = signal<number>(0);
+  user = signal<TUser | null>(null);
+  all_request = computed(
+    () => this.ict_pending() + this.store_pending() + this.issued()
+  );
   private apiService = inject(ApiService);
-  user = this.apiService.appUser;
+
   myChart: Chart;
   datasets = [
     [2, 4, 8, 20, 3, 9, 8, 41, 23, 15, 18, 12],
@@ -21,11 +33,17 @@ export class DashboardComponent implements OnInit {
   ];
 
   constructor() {
-    // this.user2 = this.apiService.appUser;
     Chart.register(...registerables);
+    // this.analysis();
+    this.user = this.apiService.appUser;
   }
+
   ngOnInit(): void {
     this.getAll();
+    this.analysis();
+    this.ict_pending = this.apiService.ictPending;
+    this.store_pending = this.apiService.storePending;
+    this.issued = this.apiService.issuedRequest;
   }
 
   getAll() {
@@ -54,7 +72,7 @@ export class DashboardComponent implements OnInit {
 
         datasets: [
           {
-            label: 'Pending',
+            label: 'Ict Pending',
             data: this.datasets[0],
             backgroundColor: '#DE350B',
             borderColor: '#DE350B',
@@ -62,7 +80,7 @@ export class DashboardComponent implements OnInit {
             // tension: 0.5,
           },
           {
-            label: 'Approved',
+            label: 'Store Pending',
             data: this.datasets[1],
             backgroundColor: '#FFE380',
             borderColor: '#FFE380',
@@ -108,5 +126,13 @@ export class DashboardComponent implements OnInit {
         },
       },
     });
+  }
+
+  analysis() {
+    if (this.user().membership_type === 'admin') {
+      this.apiService.requestAnalytics().subscribe();
+    } else {
+      this.apiService.personalAnalytics().subscribe();
+    }
   }
 }

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NgOtpInputComponent, NgOtpInputConfig } from 'ng-otp-input';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { TDepartment } from 'src/app/types/definition';
+import { TDepartment } from 'src/app/types/user';
 enum RegisterPages {
   REGISTER = 'REGISTER',
   OTP = 'OTP',
@@ -113,6 +113,7 @@ export class RegisterComponent {
       division: this.registerForm.value.division,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password,
+      gender: this.registerForm.value.gender,
     };
 
     this.apiService.signup(reg_obj).subscribe({

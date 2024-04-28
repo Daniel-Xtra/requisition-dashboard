@@ -7,21 +7,25 @@
         </h3>
         <div>
           <select
+            (change)="selectedPurpose($event); adminRequisitions(1, sort_by)"
             class="block w-full capitalize rounded-md border-0 px-2 py-2 text-ash-200 shadow-sm ring-1 ring-ash-200 outline-0 sm:text-sm sm:leading-6"
           >
-            <option disabled selected>Select status</option>
+            <option disabled selected *ngIf="sort_by == ''">
+              Select status
+            </option>
             <option *ngFor="let status of statuses" value="{{ status }}">
               {{ status.replaceAll("_", " ") }}
             </option>
           </select>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center" (change)="valueChange()">
           <input
             type="text"
             class="w-full text-center rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-1 ring-ash-200 placeholder:text-gray-400 outline-0 sm:text-sm sm:leading-6"
             placeholder="Start Date"
             onclick="this.type='date'"
             onblur="this.type='text'"
+            #from
           />
           <hr class="w-12 mx-2 bg-red-950 text-red-950" />
           <input
@@ -30,11 +34,12 @@
             placeholder="End Date"
             onclick="this.type='date'"
             onblur="this.type='text'"
+            #to
           />
         </div>
       </div>
     </div>
-    <div class="w-full min-h-screen overflow-x-auto px-5 pt-8" id="table">
+    <div class="w-full overflow-x-auto px-5 pt-8" id="table">
       <table class="items-center bg-transparent w-full border-collapse">
         <thead>
           <tr>
@@ -51,64 +56,51 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let requisition of requisitions">
-            <tr>
-              <td>
-                {{ requisition.user?.first_name }}
-              </td>
-              <td>{{ requisition.division?.abbreviation.toUpperCase() }}</td>
-              <td>{{ requisition.item }}</td>
-              <td>{{ requisition.qty_required }}</td>
-              <td>{{ requisition.qty_approved }}</td>
-              <td>{{ requisition.qty_issued }}</td>
-              <td>
-                {{
-                  requisition.created_at
-                    ? (requisition.created_at | timeago)
-                    : ""
-                }}
-              </td>
-              <td>
-                {{
-                  requisition.date_approved
-                    ? (requisition.date_approved | timeago)
-                    : ""
-                }}
-              </td>
-              <td>
-                {{
-                  requisition.date_issued
-                    ? (requisition.date_issued | timeago)
-                    : ""
-                }}
-              </td>
-              <td>
-                {{ requisition.status?.replaceAll("_", "    ").trim() }}
-              </td>
-            </tr>
-            <tr *ngIf="count <= 0" style="background: transparent">
-              <td colspan="9" class="text-center" style="border-bottom: none">
-                <div
-                  class="error mt-5"
-                  style="
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                  "
-                >
-                  <img src="assets/imgs/empty_state.svg" />
-                  <h5 class="pt-4">
-                    no
-                    <!-- {{ sort_by !== "all" ? sort_by.replaceAll("_", "  ") : "" }} -->
-                    requisition found
-                  </h5>
-                </div>
-              </td>
-            </tr>
-          </ng-container>
+          @for (requisition of requisitions; track requisition) {
+          <tr>
+            <td>
+              {{ requisition.user?.first_name }}
+            </td>
+            <td>{{ requisition.division?.abbreviation.toUpperCase() }}</td>
+            <td>{{ requisition.item }}</td>
+            <td>{{ requisition.qty_required }}</td>
+            <td>{{ requisition.qty_approved }}</td>
+            <td>{{ requisition.qty_issued }}</td>
+            <td>
+              {{
+                requisition.created_at ? (requisition.created_at | timeago) : ""
+              }}
+            </td>
+            <td>
+              {{
+                requisition.date_approved
+                  ? (requisition.date_approved | timeago)
+                  : ""
+              }}
+            </td>
+            <td>
+              {{
+                requisition.date_issued
+                  ? (requisition.date_issued | timeago)
+                  : ""
+              }}
+            </td>
+            <td>
+              {{ requisition.status?.replaceAll("_", "    ").trim() }}
+            </td>
+          </tr>
+          }
         </tbody>
       </table>
     </div>
+    @if(count<=0) {
+    <div class="w-full h-[60vh]">
+      <div class="error h-full justify-center items-center flex-col flex">
+        <img src="assets/imgs/empty_state.svg" />
+        <h5 class="pt-4 text-red-400 capitalize">no requisition found</h5>
+      </div>
+    </div>
+    }
   </ng-container>
   <ng-container
     *ngIf="activePage === requisitionPages.REQUISITION_DETAILS"

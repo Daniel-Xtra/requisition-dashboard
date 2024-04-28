@@ -1,1 +1,63 @@
-<p>my-requisitions works!</p>
+<div class="flex capitalize py-2 justify-end items-start cursor-pointer">
+  <button
+    class="p-3 bg-green-700 rounded-md text-sm tracking-widest text-white capitalize"
+    (click)="openModal()"
+  >
+    new requisition
+  </button>
+</div>
+<div class="w-full overflow-x-auto px-5 pt-8" id="table">
+  <table class="items-center bg-transparent w-full border-collapse">
+    <thead>
+      <tr>
+        <th>item</th>
+        <th>qty required</th>
+        <th>qty approved</th>
+        <th>qty issued</th>
+        <th>date requested</th>
+        <th>date approved</th>
+        <th>date issued</th>
+        <th>status</th>
+        <th>action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (requisition of myRequisitions; track requisition) {
+      <tr>
+        <td>{{ requisition.item }}</td>
+        <td>{{ requisition.qty_required }}</td>
+        <td>{{ requisition.qty_approved }}</td>
+        <td>{{ requisition.qty_issued }}</td>
+        <td>
+          {{ requisition.created_at ? (requisition.created_at | timeago) : "" }}
+        </td>
+        <td>
+          {{
+            requisition.date_approved
+              ? (requisition.date_approved | timeago)
+              : ""
+          }}
+        </td>
+        <td>
+          {{
+            requisition.date_issued ? (requisition.date_issued | timeago) : ""
+          }}
+        </td>
+        <td>
+          {{ requisition.status?.replaceAll("_", "    ").trim() }}
+        </td>
+        <td><img src="assets/icons/dropdown.svg" alt="" /></td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+@if(count<=0){
+<div class="w-full h-[60vh]">
+  <div class="error h-full justify-center items-center flex-col flex">
+    <img src="assets/imgs/empty_state.svg" />
+    <h5 class="pt-4 text-red-400 capitalize">no requisition found</h5>
+  </div>
+</div>
+}
+<app-new-requisition (requisitions)="fetchRequsitions(1)"></app-new-requisition>

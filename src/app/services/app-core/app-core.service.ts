@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { TUser } from 'src/app/types/definition';
+import { TUser } from 'src/app/types/user';
 import { CryptoService } from '../crypto/crypto.service';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';

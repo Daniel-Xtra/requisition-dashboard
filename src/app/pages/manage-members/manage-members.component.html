@@ -1,7 +1,7 @@
 <div class="w-full" *ngIf="activePage !== memberPages.VIEW_MEMBER">
-  <h1 class="uppercase font-semibold tracking-wider text-lg pt-2 pb-4">
+  <!-- <h1 class="uppercase font-semibold tracking-wider text-lg pt-2 pb-4">
     manage members
-  </h1>
+  </h1> -->
 
   <div class="grid xl:grid-cols-3 md:grid-cols-2 mb-16 gap-4 w-full">
     <div
@@ -10,12 +10,16 @@
           ? 'active:shadow-none'
           : 'shadow-lg'
       }}"
-      (click)="pageChangeHandler(memberPages.TOTAL_MEMBERS)"
+      (click)="
+        pageChangeHandler(memberPages.TOTAL_MEMBERS);
+        activeTab = memberPages.TOTAL_MEMBERS;
+        fetchStaffs(1)
+      "
     >
       <div class="flex items-center h-full gap-6">
         <img src="assets/imgs/total-members.svg" alt="" />
         <div class="block space-y-3">
-          <div class="text-black text-md font-normal">362</div>
+          <div class="text-black text-md font-normal">{{ totalMember() }}</div>
           <h1 class="text-sm font-normal text-ash-40 tracking-wider">
             Total Number of Members
           </h1>
@@ -28,12 +32,16 @@
           ? 'active:shadow-none'
           : 'shadow-lg'
       }}  "
-      (click)="pageChangeHandler(memberPages.ACTIVE_MEMBERS)"
+      (click)="
+        pageChangeHandler(memberPages.ACTIVE_MEMBERS);
+        activeTab = memberPages.ACTIVE_MEMBERS;
+        fetchStaffs(1, 'true')
+      "
     >
       <div class="flex items-center h-full gap-6">
         <img src="assets/imgs/active-members.svg" alt="" />
         <div class="block space-y-3">
-          <div class="text-black text-md font-normal">272</div>
+          <div class="text-black text-md font-normal">{{ activeMember() }}</div>
           <h1 class="text-sm font-normal text-ash-40 tracking-wider">
             Total Verified Members
           </h1>
@@ -46,12 +54,18 @@
           ? 'active:shadow-none'
           : 'shadow-lg'
       }}   "
-      (click)="pageChangeHandler(memberPages.INACTIVE_MEMBERS)"
+      (click)="
+        pageChangeHandler(memberPages.INACTIVE_MEMBERS);
+        activeTab = memberPages.INACTIVE_MEMBERS;
+        fetchStaffs(1, 'false')
+      "
     >
       <div class="flex items-center h-full gap-6">
         <img src="assets/imgs/inactive-members.svg" alt="" />
         <div class="block space-y-3">
-          <div class="text-black text-md font-normal">362</div>
+          <div class="text-black text-md font-normal">
+            {{ inactiveMember() }}
+          </div>
           <h1 class="text-sm font-normal text-ash-40 tracking-wider">
             Not Verified Members
           </h1>
@@ -60,7 +74,7 @@
     </div>
   </div>
 
-  <div class="w-full overflow-x-auto px-5 pt-8 pb-16" id="table">
+  <div class="w-full overflow-x-auto px-5 pt-4 pb-16" id="table">
     <table class="items-center bg-transparent w-full border-collapse">
       <thead>
         <tr>
@@ -79,167 +93,155 @@
 
       <tbody class="border-b-2">
         <ng-container *ngIf="activePage === memberPages.TOTAL_MEMBERS">
-          <ng-container>
-            <tr>
-              <td class="">1</td>
-              <td>
-                <div class="flex gap-2 items-center">
-                  <img
-                    class="inline-block h-8 w-8 rounded-full ring-2 ring-white shrink-0"
-                    src="assets/imgs/female-avatar.svg"
-                    alt=""
-                  />Bajomo Mayowa
-                </div>
-              </td>
-              <td class="normal-case">someone&#64;support.com</td>
-              <td class="uppercase">admin</td>
-              <td>computer science</td>
+          @for (staff of staffs; track staff) {
+          <tr>
+            <td class="">{{ $index + 1 }}</td>
+            <td>
+              <div class="flex gap-2 items-center">
+                <img
+                  class="inline-block h-8 w-8 rounded-full ring-2 ring-white shrink-0"
+                  [src]="
+                    staff?.profile.profile_picture_url ||
+                    (staff?.gender == 'male'
+                      ? 'assets/imgs/male-avatar.svg'
+                      : 'assets/imgs/female-avatar.svg')
+                  "
+                  alt=""
+                />{{ staff?.first_name }} {{ staff?.last_name }}
+              </div>
+            </td>
+            <td class="normal-case">{{ staff?.email }}</td>
+            <td class="uppercase">{{ staff?.membership_type }}</td>
+            <td class="uppercase">{{ staff?.division?.abbreviation }}</td>
 
-              <td>0802380975</td>
-              <td>
-                <div
-                  class="{{
-                    'not verified' | colorPipe
-                  }} uppercase px-2 py-1 w-fit  text-[11px] tracking-widest font-semibold rounded-md"
-                >
-                  not verified
-                </div>
-              </td>
-
-              <td
-                class="flex items-center font-semibold view gap-1 align-middle cursor-pointer"
-                (click)="pageChangeHandler(memberPages.VIEW_MEMBER)"
+            <td>{{ staff?.phone_number }}</td>
+            <td>
+              <div
+                class="{{
+                  (staff?.verified == true ? 'verified' : 'not verified')
+                    | colorPipe
+                }} uppercase px-2 py-1 w-fit  text-[11px] tracking-widest font-semibold rounded-md"
               >
-                <img src="assets/icons/eye.svg" />
-                view
-              </td>
-            </tr>
-            <tr>
-              <td class="">
-                {{ 2 }}
-              </td>
-              <td>
-                <div class="flex gap-2 items-center">
-                  <img
-                    class="inline-block h-8 w-8 rounded-full ring-2 ring-white shrink-0"
-                    src="assets/imgs/male-avatar.svg"
-                    alt=""
-                  />Bajomo Mayowa
-                </div>
-              </td>
-              <td class="normal-case">someone&#64;support.com</td>
-              <td class="uppercase">staff</td>
-              <td>computer science</td>
+                {{ staff?.verified == true ? "verified" : "not verified" }}
+              </div>
+            </td>
 
-              <td>0802380975</td>
-              <td>
-                <div
-                  class="{{
-                    'verified' | colorPipe
-                  }} uppercase px-2 py-1 text-[11px] w-fit font-semibold tracking-widest rounded-md"
-                >
-                  verified
-                </div>
-              </td>
+            <td
+              class="flex items-center font-semibold view gap-1 align-middle cursor-pointer"
+              (click)="
+                pageChangeHandler(memberPages.VIEW_MEMBER); singleData(staff)
+              "
+            >
+              <img src="assets/icons/eye.svg" />
+              view
+            </td>
+          </tr>
 
-              <td
-                class="flex items-center font-semibold view gap-1 align-middle cursor-pointer"
-              >
-                <img src="assets/icons/eye.svg" />
-                view
-              </td>
-            </tr>
-          </ng-container></ng-container
-        >
+          }
+        </ng-container>
         <ng-container *ngIf="activePage === memberPages.ACTIVE_MEMBERS">
-          <ng-container *ngFor="let det of [].constructor(5); let i = index">
-            <tr>
-              <td class="">
-                {{ 1 + i }}
-              </td>
-              <td>
-                <div class="flex gap-2 items-center">
-                  <img
-                    class="inline-block h-8 w-8 rounded-full ring-2 ring-white shrink-0"
-                    src="assets/imgs/female-avatar.svg"
-                    alt=""
-                  />Bajomo Mayowa
-                </div>
-              </td>
-              <td class="normal-case">someone&#64;support.com</td>
-              <td class="uppercase">store</td>
-              <td class="uppercase">gsd</td>
+          @for (staff of staffs; track staff) {
+          <tr>
+            <td class="">{{ $index + 1 }}</td>
+            <td>
+              <div class="flex gap-2 items-center">
+                <img
+                  class="inline-block h-8 w-8 rounded-full ring-2 ring-white shrink-0"
+                  [src]="
+                    staff?.profile.profile_picture_url ||
+                    staff?.gender == 'male'
+                      ? 'assets/imgs/male-avatar.svg'
+                      : 'assets/imgs/female-avatar.svg'
+                  "
+                  alt=""
+                />{{ staff?.first_name }} {{ staff?.last_name }}
+              </div>
+            </td>
+            <td class="normal-case">{{ staff?.email }}</td>
+            <td class="uppercase">{{ staff?.membership_type }}</td>
+            <td class="uppercase">{{ staff?.division?.abbreviation }}</td>
 
-              <td>0802380975</td>
-              <td>
-                <div
-                  class="{{
-                    'verified' | colorPipe
-                  }} uppercase px-2 py-1 text-[11px] w-fit tracking-widest font-semibold rounded-md"
-                >
-                  verified
-                </div>
-              </td>
-
-              <td
-                class="flex items-center font-semibold gap-1 view align-middle cursor-pointer"
+            <td>{{ staff?.phone_number }}</td>
+            <td>
+              <div
+                class="{{
+                  (staff?.verified == true ? 'verified' : 'not verified')
+                    | colorPipe
+                }} uppercase px-2 py-1 w-fit  text-[11px] tracking-widest font-semibold rounded-md"
               >
-                <img src="assets/icons/eye.svg" />
-                view
-              </td>
-            </tr></ng-container
-          ></ng-container
-        >
+                {{ staff?.verified == true ? "verified" : "not verified" }}
+              </div>
+            </td>
+
+            <td
+              class="flex items-center font-semibold view gap-1 align-middle cursor-pointer"
+              (click)="
+                pageChangeHandler(memberPages.VIEW_MEMBER); singleData(staff)
+              "
+            >
+              <img src="assets/icons/eye.svg" />
+              view
+            </td>
+          </tr>
+
+          }
+        </ng-container>
         <ng-container *ngIf="activePage === memberPages.INACTIVE_MEMBERS">
-          <ng-container *ngFor="let det of [].constructor(5); let i = index">
-            <tr>
-              <td class="">
-                {{ 1 + i }}
-              </td>
-              <td>
-                <div class="flex gap-2 items-center">
-                  <img
-                    class="inline-block h-8 w-8 rounded-full ring-2 ring-white shrink-0"
-                    src="assets/imgs/male-avatar.svg"
-                    alt=""
-                  />Bajomo Mayowa
-                </div>
-              </td>
-              <td class="normal-case">someone&#64;support.com</td>
-              <td class="uppercase">ict</td>
-              <td class="uppercase">sprd</td>
+          @for (staff of staffs; track staff) {
+          <tr>
+            <td class="">{{ $index + 1 }}</td>
+            <td>
+              <div class="flex gap-2 items-center">
+                <img
+                  class="inline-block h-8 w-8 rounded-full ring-2 ring-white shrink-0"
+                  [src]="
+                    staff?.profile.profile_picture_url ||
+                    'assets/imgs/female-avatar.svg'
+                  "
+                  onerror="'assets/imgs/female-avatar.svg'"
+                  alt=""
+                />{{ staff?.first_name }} {{ staff?.last_name }}
+              </div>
+            </td>
+            <td class="normal-case">{{ staff?.email }}</td>
+            <td class="uppercase">{{ staff?.membership_type }}</td>
+            <td class="uppercase">{{ staff?.division?.abbreviation }}</td>
 
-              <td>0802380975</td>
-              <td>
-                <div
-                  class="uppercase px-2 py-1 text-[11px] w-fit tracking-widest font-semibold rounded-md {{
-                    'not verified' | colorPipe
-                  }}"
-                >
-                  not verified
-                </div>
-              </td>
-
-              <td
-                class="flex items-center font-semibold view gap-1 align-middle cursor-pointer"
+            <td>{{ staff?.phone_number }}</td>
+            <td>
+              <div
+                class="{{
+                  (staff?.verified == true ? 'verified' : 'not verified')
+                    | colorPipe
+                }} uppercase px-2 py-1 w-fit  text-[11px] tracking-widest font-semibold rounded-md"
               >
-                <img src="assets/icons/eye.svg" />
-                view
-              </td>
+                {{ staff?.verified == true ? "verified" : "not verified" }}
+              </div>
+            </td>
 
-              <!-- <td
-                class="border-t-0 px-6 capitalize align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 cursor-pointer"
-              >
-                <img src="assets/icons/dropdown.svg" alt="" />
-              </td> -->
-            </tr></ng-container
-          ></ng-container
+            <td
+              class="flex items-center font-semibold view gap-1 align-middle cursor-pointer"
+              (click)="
+                pageChangeHandler(memberPages.VIEW_MEMBER); singleData(staff)
+              "
+            >
+              <img src="assets/icons/eye.svg" />
+              view
+            </td>
+          </tr>
+
+          }</ng-container
         >
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- <div class="w-full" *ngIf="activePage === memberPages.VIEW_MEMBER">
-  <app-view-member></app-view-member>
-</div> -->
+<div class="w-full" *ngIf="activePage === memberPages.VIEW_MEMBER">
+  <app-view-member
+    [active]="activeTab"
+    [member]="staff"
+    (page)="getEmit($event)"
+    (update)="getUpdate($event)"
+  ></app-view-member>
+</div>

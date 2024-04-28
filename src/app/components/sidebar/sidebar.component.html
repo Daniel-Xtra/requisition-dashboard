@@ -33,6 +33,14 @@
         <div class="flex items-center gap-5">
           <img [src]="menuItem.icon" />
           <div>{{ menuItem.title }}</div>
+          @if(menuItem.badge && count > 0 &&
+          menuItem.path==="/manage-requisitions"){
+          <span
+            [routerLinkActive]="['active']"
+            [routerLink]="[menuItem.path]"
+            class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+            >{{ count }}</span
+          >}
         </div>
 
         <img

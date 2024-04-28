@@ -7,25 +7,25 @@
         <img src="assets/icons/reload.svg" alt="" />
         <div class="text-ash-400 font-normal capitalize">all requests</div>
       </div>
-      <div class="text-ash-600 text-md">1,183</div>
+      <div class="text-ash-600 text-md">{{ all_request() }}</div>
     </div>
     <div
       class="bg-white shadow-lg rounded-md space-y-3 h-auto py-4 pl-4 border"
     >
       <div class="flex items-center gap-2">
         <img src="assets/icons/reload.svg" alt="" />
-        <div class="text-ash-400 capitalize">pending requests</div>
+        <div class="text-ash-400 capitalize">ict pending</div>
       </div>
-      <div class="text-ash-600 text-md">293</div>
+      <div class="text-ash-600 text-md">{{ ict_pending() }}</div>
     </div>
     <div
       class="bg-white shadow-lg rounded-md space-y-3 h-auto py-4 pl-4 border"
     >
       <div class="flex items-center gap-2">
         <img src="assets/icons/active.svg" alt="" />
-        <div class="text-ash-400 capitalize">approved requests</div>
+        <div class="text-ash-400 capitalize">store pending</div>
       </div>
-      <div class="figure text-ash-600 text-md">793</div>
+      <div class="figure text-ash-600 text-md">{{ store_pending() }}</div>
     </div>
     <div
       class="bg-white shadow-lg rounded-md space-y-3 h-auto py-4 pl-4 border"
@@ -34,7 +34,7 @@
         <img src="assets/icons/timer.svg" alt="" />
         <div class="text-ash-400 capitalize">issued items</div>
       </div>
-      <div class="figure text-ash-600 text-md">293</div>
+      <div class="figure text-ash-600 text-md">{{ issued() }}</div>
     </div>
   </div>
   <div class="p-4 rounded-md ring-1 ring-ash-200">

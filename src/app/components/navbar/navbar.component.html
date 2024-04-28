@@ -52,13 +52,6 @@
             id="menu-item-0"
             >Profile</a
           >
-          <a
-            class="block px-4 py-2 text-sm"
-            role="menuitem"
-            tabindex="-1"
-            id="menu-item-1"
-            >Logs</a
-          >
 
           <a
             class="block px-4 py-2 text-sm"
@@ -88,7 +81,12 @@
         </div>
         <img
           class="inline-block h-8 w-8 rounded-full ring-2 ring-offset-2 ring-gray-50 shrink-0"
-          src="assets/imgs/male-avatar.svg"
+          [src]="
+            user()?.profile.profile_picture_url ||
+            (user()?.gender == 'male'
+              ? 'assets/imgs/male-avatar.svg'
+              : 'assets/imgs/female-avatar.svg')
+          "
           alt=""
         />
       </div>
