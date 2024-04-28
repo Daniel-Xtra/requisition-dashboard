@@ -18,7 +18,7 @@ jobs:
           node-version: "18.x"
       - run: node prodserver.js
         env:
-          STAGING_ENV: ${{ secrets.PRODUCTION_ENV}}
+          PRODUCTION_ENV: ${{ secrets.PRODUCTION_ENV}}
       - uses: actions/cache@v3 # this allows for re-using node_modules caching, making builds a bit faster.
         with:
           path: ~/.npm
