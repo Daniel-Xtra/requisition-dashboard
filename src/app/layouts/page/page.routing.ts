@@ -9,6 +9,9 @@ import { AdminGuard } from 'src/app/guards/admin.guard';
 
 import { StoreGuard } from 'src/app/guards/store.guard';
 import { AuthGuard } from 'src/app/guards/auth.guard';
+import { SettingsComponent } from 'src/app/pages/settings/settings.component';
+import { ReviewRequisitionsComponent } from 'src/app/pages/review-requisitions/review-requisitions.component';
+import { IctGuard } from 'src/app/guards/ict.guard';
 export enum Role {
   staff = 'staff',
   admin = 'admin',
@@ -30,7 +33,7 @@ export const PageRoutes: Routes = [
   {
     path: 'requisitions',
     component: RequisitionsComponent,
-    canActivate: [StoreGuard],
+    canActivate: [AdminGuard],
     data: { membership_type: [Role.admin] },
   },
   {
@@ -42,6 +45,17 @@ export const PageRoutes: Routes = [
   {
     path: 'my-requisitions',
     component: MyRequisitionsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'review-requisitions',
+    component: ReviewRequisitionsComponent,
+    canActivate: [IctGuard],
+    data: { membership_type: [Role.ict] },
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
     canActivate: [AuthGuard],
   },
 ];

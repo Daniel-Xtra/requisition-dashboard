@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { SocketEvents } from 'src/app/app.enum';
 import { ApiService } from 'src/app/services/api/api.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 declare interface RouteInfo {
   path: string;
   title: string;
   icon: string;
   class?: string;
   role: string[];
+  badge?: boolean;
 }
 export const ROUTES: RouteInfo[] = [
   {
@@ -25,9 +28,9 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '/my-requisitions',
-    title: 'Requisitions',
+    title: 'My Requisitions',
     icon: 'assets/icons/history.svg',
-    role: ['staff', 'ict', 'store'],
+    role: ['staff'],
   },
   {
     path: '/requisitions',
@@ -40,12 +43,21 @@ export const ROUTES: RouteInfo[] = [
     title: 'Manage Requisitions',
     icon: 'assets/icons/loan.svg',
     role: ['store'],
+    badge: true,
   },
-  // {
-  //   path: '/manage-vault',
-  //   title: 'Manage Vault',
-  //   icon: 'assets/icons/vault.svg',
-  // },
+  {
+    path: '/review-requisitions',
+    title: 'Review Requisition',
+    icon: 'assets/icons/history.svg',
+    role: ['ict'],
+    badge: true,
+  },
+  {
+    path: '/settings',
+    title: 'Settings',
+    icon: 'assets/icons/vault.svg',
+    role: ['staff', 'ict', 'store', 'admin'],
+  },
 ];
 @Component({
   selector: 'app-sidebar',
@@ -56,17 +68,26 @@ export class SidebarComponent {
   public menuItems!: any[];
   public isCollapsed = true;
   public role: any;
-
+  private socket = inject(SocketService);
   private apiService = inject(ApiService);
+  count: number = 0;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.socket.listen(SocketEvents.ICT_STORE).subscribe((data) => {
+      this.count = data;
+    });
+    this.socket.listen(SocketEvents.STORE_MESSAGE).subscribe((data) => {
+      // this.count = data;
+      console.log(data);
+    });
+  }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter((menuItem) => menuItem);
-    this.router.events.subscribe((event) => {
-      this.isCollapsed = true;
-    });
-    // this.getRole();
+    // this.menuItems = ROUTES.filter((menuItem) => menuItem);
+    // this.router.events.subscribe((event) => {
+    //   this.isCollapsed = true;
+    // });
+    this.getRole();
     let toggle = document.querySelector('.closer') as HTMLElement;
     let sidebar = document.querySelector('.sidebar');
 
@@ -99,7 +120,7 @@ export class SidebarComponent {
     document.querySelector('#arrow').classList.toggle('rotate-0');
   }
   getRole() {
-    this.role = this.apiService.appUser().membership_type;
+    this.role = this.apiService.appUser()?.membership_type;
 
     this.menuItems = ROUTES.filter((menu) => {
       return menu.role.includes(this.role);
@@ -107,5 +128,9 @@ export class SidebarComponent {
     this.router.events.subscribe((event) => {
       this.isCollapsed = true;
     });
+  }
+
+  onClick() {
+    this.router.navigate(['settings'], { skipLocationChange: true });
   }
 }

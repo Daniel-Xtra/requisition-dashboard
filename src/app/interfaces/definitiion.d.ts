@@ -1,4 +1,5 @@
-import { TDepartment, TList, TUser } from '../types/definition';
+import { TStaff } from '../types/staff';
+import { TDepartment, TResult, TUser } from '../types/user';
 
 export interface IBaseResponse {
   readonly status?: boolean;
@@ -24,8 +25,52 @@ export interface IDepartmentResponse extends IBaseResponse {
 export interface IAdminRequisitionResponse extends IBaseResponse {
   readonly data: {
     count: number;
-    list: TList;
+    results: TResult[];
     totalPages: number;
     currentPage: number;
   };
+}
+
+export interface IMyRequisitionResponse extends IBaseResponse {
+  readonly data: {
+    count: number;
+    results: TResult[];
+    totalPages: number;
+    currentPage: number;
+  };
+}
+
+export interface IIctRequisitionResponse extends IBaseResponse {
+  readonly data: {
+    count: number;
+    results: TResult[];
+    totalPages: number;
+    currentPage: number;
+  };
+}
+
+export interface IStaffResponse extends IBaseResponse {
+  readonly data: {
+    count: number;
+    results: TStaff[];
+    totalPages: number;
+    currentPage: number;
+  };
+}
+
+export interface IStoreResponse extends IBaseResponse {
+  readonly data: {
+    count: number;
+    results: TResult[];
+    totalPages: number;
+    currentPage: number;
+  };
+}
+
+export interface IStaffUpdateResponse extends IBaseResponse {
+  readonly data: TStaff;
+}
+
+export interface IStoreReviewResponse extends IBaseResponse {
+  readonly data: TResult;
 }

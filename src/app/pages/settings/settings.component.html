@@ -1,0 +1,290 @@
+<div class="md:flex items-center my-3">
+  <div class="relative">
+    <img
+      class="w-24 h-24 md:w-48 md:h-48 rounded-full shrink-0"
+      [src]="
+        user()?.profile.profile_picture_url ||
+        (user()?.gender == 'male'
+          ? 'assets/imgs/male-avatar.svg'
+          : 'assets/imgs/female-avatar.svg')
+      "
+      alt=""
+    />
+    <input
+      style="display: none"
+      type="file"
+      id="fileName"
+      (change)="onFileSelect($event)"
+      #hiddenfileinput
+      accept=".jpg,.jpeg,.png"
+    />
+    <i
+      class="fa fa-camera absolute top-[72%] text-[24px] p-4 bg-white rounded-full left-[67%]"
+      (click)="hiddenfileinput.click()"
+      aria-hidden="true"
+    ></i>
+  </div>
+  <div class="pt-6 md:p-8 text-left space-y-4">
+    <div class="flex items-center">
+      <div class="normal-case font-medium">A/C Name</div>
+      <div class="capitalize text-base font-bold tracking-wider">
+        : {{ user()?.first_name }} {{ user()?.last_name }}
+      </div>
+    </div>
+    <div
+      class="flex uppercase text-sm font-semibold tracking-wide text-white items-center gap-2"
+    >
+      <div
+        class="{{
+          (user()?.verified == true ? 'verified' : 'not verified') | colorPipe
+        }} p-2 tracking-widest w-fit rounded-sm"
+      >
+        {{ user()?.verified == true ? "verified" : "not verified" }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w-full bg-[#F4F5F7] rounded-sm px-4 pt-2 pb-7">
+  <ul
+    class="flex gap-10 items-center overflow-x-auto text-center border-b border-gray-200 text-gray-500"
+  >
+    <li class="whitespace-nowrap">
+      <a
+        (click)="pageChangeHandler(settingPages.PROFILE_SETTINGS)"
+        class="flex capitalize justify-center border-b-4  whitespace-nowrap cursor-pointer font-semibold text-sm tracking-wider pt-3 pb-2 {{
+          activePage === settingPages.PROFILE_SETTINGS
+            ? 'text-green-500 border-green-600'
+            : 'border-transparent'
+        }} "
+        >profile settings
+      </a>
+    </li>
+
+    <li class="whitespace-nowrap">
+      <a
+        (click)="pageChangeHandler(settingPages.CHANGE_PASSWORD)"
+        class="flex capitalize whitespace-nowrap justify-center border-b-4 cursor-pointer font-semibold text-sm tracking-wider pt-3 pb-2 {{
+          activePage === settingPages.CHANGE_PASSWORD
+            ? 'text-green-500 border-green-600'
+            : 'border-transparent'
+        }}  "
+        >change password</a
+      >
+    </li>
+    <li class="whitespace-nowrap">
+      <a
+        (click)="pageChangeHandler(settingPages.COMPLAIN)"
+        class="flex capitalize whitespace-nowrap justify-center border-b-4  cursor-pointer font-semibold text-sm tracking-wider pt-3 pb-2 {{
+          activePage === settingPages.COMPLAIN
+            ? 'text-green-500 border-green-600'
+            : 'border-transparent'
+        }}  "
+        >complain</a
+      >
+    </li>
+  </ul>
+</div>
+
+<ng-container *ngIf="activePage === settingPages.PROFILE_SETTINGS">
+  <div class="w-full px-4 rounded-sm my-6 shadow-md bg-[#F4F5F7]">
+    <div
+      class="capitalize font-bold text-base pt-12 text-[#344563] tracking-wider pb-2"
+    >
+      profile details
+    </div>
+    <form #updateProfileForm="ngForm" (ngSubmit)="profileUpdate()">
+      <div class="grid grid-cols-4 gap-x-6 gap-y-8 py-5">
+        <!-- <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">staff no</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              placeholder="DU234FNA3"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div> -->
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">surname</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [(ngModel)]="updateProfile.last_name"
+              name="last_name"
+              class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">firstname</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [(ngModel)]="updateProfile.first_name"
+              name="first_name"
+              class="block w-full rounded-md capitalize border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">role</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              readonly
+              [(ngModel)]="updateProfile.membership_type"
+              name="membership_type"
+              class="block w-full uppercase rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label for="city" class="block capitalize leading-">deparment</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              readonly
+              [(ngModel)]="updateProfile.division"
+              name="department"
+              class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">date joined</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [ngModel]="updateProfile.date_joined | date : 'd MMMM, y'"
+              readonly
+              name="date_joined"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">email</label>
+          <div class="mt-2">
+            <input
+              type="email"
+              readonly
+              [(ngModel)]="updateProfile.email"
+              name="email"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">phone number</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [(ngModel)]="updateProfile.phone_number"
+              name="phone_number"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">current position</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [(ngModel)]="updateProfile.current_position"
+              name="current_position"
+              class="block w-full rounded-md capitalize border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">gender</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              readonly
+              [(ngModel)]="updateProfile.gender"
+              name="gender"
+              class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="flex justify-end mb-6">
+            <button
+              class="bg-green-700 rounded-md p-3 text-sm uppercase text-white"
+              type="submit"
+            >
+              edit profile
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="activePage === settingPages.CHANGE_PASSWORD">
+  <div class="w-2/5 px-4 rounded-sm my-6 shadow-md bg-[#F4F5F7]">
+    <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+      <div class="grid grid-cols-2 gap-x-6 gap-y-8 py-5">
+        <div class="col-span-2">
+          <label class="block capitalize leading-6">old password</label>
+          <div class="mt-2">
+            <input
+              type="password"
+              name="old_password"
+              formControlName="old_password"
+              class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-2">
+          <label class="block capitalize leading-6">new password</label>
+          <div class="mt-2">
+            <input
+              type="password"
+              name="new_password"
+              formControlName="new_password"
+              class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-2">
+          <label class="block capitalize leading-6">confirm password</label>
+          <div class="mt-2">
+            <input
+              type="password"
+              name="confirm_password"
+              formControlName="confirm_password"
+              class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+            <div
+              *ngIf="
+                changePasswordForm.value.confirm_password !==
+                  changePasswordForm.value.new_password &&
+                changePasswordForm.controls['confirm_password'].dirty
+              "
+              class="text-red-600 normal-case tracking-widest"
+            >
+              Password do not match
+            </div>
+          </div>
+        </div>
+        <div class="col-span-2">
+          <div class="mb-6">
+            <button
+              class="bg-green-700 w-full rounded-md p-3 text-sm tracking-widest uppercase text-white"
+              type="submit"
+              [disabled]="!changePasswordForm.valid"
+            >
+              change password
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>

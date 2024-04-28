@@ -11,11 +11,12 @@ export type TUser = {
   player_id: any;
   pass_updated: number;
   refresh_token: any;
-  created_at: Date;
+  created_at: string;
   updated_at: Date;
   deleted_at: Date;
   divisionId: number;
   profile: TProfile;
+  division: TDivision;
 };
 
 export type TResetPassword = {
@@ -34,7 +35,7 @@ export type TDepartment = {
   deleted_at: any;
 };
 
-export type TList = {
+export type TResult = {
   id: number;
   item: string;
   unique_id: string;

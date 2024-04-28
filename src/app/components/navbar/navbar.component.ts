@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { TUser } from 'src/app/types/definition';
+import { TUser } from 'src/app/types/user';
 import {
   Location,
   LocationStrategy,

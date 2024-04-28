@@ -1,0 +1,405 @@
+<div
+  class="flex capitalize py-4 justify-end gap-1 items-start cursor-pointer"
+  (click)="pageSwitch()"
+>
+  close <img src="assets/icons/cross-circle.svg" alt="" />
+</div>
+<div class="md:flex items-center my-3">
+  <img
+    class="w-24 h-24 md:w-48 md:h-48 rounded-full shrink-0"
+    [src]="
+      member?.profile.profile_picture_url ||
+      (member?.gender == 'male'
+        ? 'assets/imgs/male-avatar.svg'
+        : 'assets/imgs/female-avatar.svg')
+    "
+    alt=""
+    width="384"
+    height="512"
+  />
+  <div class="pt-6 md:p-8 text-left space-y-4">
+    <div class="flex items-center">
+      <div class="normal-case font-medium">A/C Name</div>
+      <div class="capitalize text-base font-bold tracking-wider">
+        : {{ member?.first_name }} {{ member?.last_name }}
+      </div>
+    </div>
+    <div
+      class="flex uppercase text-sm font-semibold tracking-wide text-white items-center gap-2"
+    >
+      <div
+        class="{{
+          (member?.verified == true ? 'verified' : 'not verified') | colorPipe
+        }} p-2 tracking-widest w-fit rounded-sm"
+      >
+        {{ member?.verified == true ? "verified" : "not verified" }}
+      </div>
+      <!-- <div class="bg-ash-500 p-1 tracking-wider rounded-sm">
+        active loans: 1
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<div class="w-full bg-[#F4F5F7] rounded-sm px-4 pt-2 pb-7">
+  <ul
+    class="flex gap-10 items-center overflow-x-auto text-center border-b border-gray-200 text-gray-500"
+  >
+    <li class="whitespace-nowrap">
+      <a
+        (click)="pageChangeHandler(viewPages.PROFILE_SETTINGS)"
+        class="flex capitalize justify-center border-b-4  whitespace-nowrap cursor-pointer font-semibold text-sm tracking-wider pt-3 pb-2 {{
+          activePage === viewPages.PROFILE_SETTINGS
+            ? 'text-green-500 border-green-600'
+            : 'border-transparent'
+        }} "
+        >profile settings
+      </a>
+    </li>
+
+    <li class="whitespace-nowrap">
+      <a
+        (click)="
+          pageChangeHandler(viewPages.ICT);
+          memberReq(member?.email, 'ict_pending', 1)
+        "
+        class="flex capitalize whitespace-nowrap justify-center border-b-4 cursor-pointer font-semibold text-sm tracking-wider pt-3 pb-2 {{
+          activePage === viewPages.ICT
+            ? 'text-green-500 border-green-600'
+            : 'border-transparent'
+        }}  "
+        >ict pending requisitions</a
+      >
+    </li>
+    <li class="whitespace-nowrap">
+      <a
+        (click)="
+          pageChangeHandler(viewPages.STORE);
+          memberReq(member?.email, 'store_pending', 1)
+        "
+        class="flex capitalize whitespace-nowrap justify-center border-b-4  cursor-pointer font-semibold text-sm tracking-wider pt-3 pb-2 {{
+          activePage === viewPages.STORE
+            ? 'text-green-500 border-green-600'
+            : 'border-transparent'
+        }}  "
+        >store pending requisitions</a
+      >
+    </li>
+    <li class="whitespace-nowrap">
+      <a
+        (click)="
+          pageChangeHandler(viewPages.ISSUED);
+          memberReq(member?.email, 'issued', 1)
+        "
+        class="flex capitalize justify-center whitespace-nowrap border-b-4  cursor-pointer font-semibold text-sm tracking-wider pt-3 pb-2 {{
+          activePage === viewPages.ISSUED
+            ? 'text-green-500 border-green-600'
+            : 'border-transparent'
+        }}  "
+        >issued requisitions</a
+      >
+    </li>
+  </ul>
+</div>
+
+<ng-container *ngIf="activePage === viewPages.PROFILE_SETTINGS">
+  <div class="w-full px-4 rounded-sm my-6 shadow-md bg-[#F4F5F7]">
+    <div
+      class="capitalize font-bold text-base pt-12 text-[#344563] tracking-wider pb-2"
+    >
+      profile details
+    </div>
+    <form #updateMemberForm="ngForm" (ngSubmit)="updateStaff()">
+      <div class="grid grid-cols-4 gap-x-6 gap-y-8 py-5">
+        <!-- <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">staff no</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              placeholder="DU234FNA3"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div> -->
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">surname</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [(ngModel)]="updateMember.last_name"
+              name="last_name"
+              class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">firstname</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [(ngModel)]="updateMember.first_name"
+              name="first_name"
+              class="block w-full rounded-md capitalize border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">role</label>
+          <div class="mt-2">
+            <select
+              [(ngModel)]="updateMember.membership_type"
+              name="membership_type"
+              class="block w-full rounded-md border-0 px-2 py-2 mt-2 text-ash-200 shadow-sm ring-0 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            >
+              <option value="admin">Admin</option>
+              <option value="ict">ICT</option>
+              <option value="staff">Staff</option>
+              <option value="store">Store</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label for="city" class="block capitalize leading-">deparment</label>
+          <div class="mt-2">
+            <select
+              [(ngModel)]="updateMember.division"
+              name="division"
+              class="block w-full capitalize rounded-md border-0 px-2 py-2 mt-2 text-ash-200 shadow-sm ring-0 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            >
+              <option
+                *ngFor="let department of departments"
+                value="{{ department?.name }}"
+                class="capitalize"
+              >
+                {{ department.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">date joined</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [ngModel]="updateMember.date_joined | date : 'd MMMM, y'"
+              readonly
+              name="date_joined"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">email</label>
+          <div class="mt-2">
+            <input
+              type="email"
+              readonly
+              [(ngModel)]="updateMember.email"
+              name="email"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">phone number</label>
+          <div class="mt-2">
+            <input
+              type="text"
+              [(ngModel)]="updateMember.phone_number"
+              name="phone_number"
+              class="block w-full rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div class="col-span-4 sm:col-span-2 xl:col-span-1">
+          <label class="block capitalize leading-6">status</label>
+          <select
+            [(ngModel)]="updateMember.verified"
+            name="verified"
+            class="block w-full rounded-md border-0 px-2 py-2 mt-2 text-ash-200 shadow-sm ring-0 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+          >
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+
+        <div class="col-span-4">
+          <div class="flex justify-end mb-6">
+            <button
+              class="bg-green-700 rounded-md p-3 text-sm uppercase text-white"
+              type="submit"
+            >
+              edit profile
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="activePage === viewPages.ICT">
+  <div class="w-full overflow-x-auto px-4 pt-8" id="table">
+    <table class="items-center bg-transparent w-full border-collapse">
+      <thead>
+        <tr>
+          <th>reference number</th>
+          <th>staff</th>
+          <th>department</th>
+          <th>item</th>
+
+          <th>qty required</th>
+          <th>date requested</th>
+
+          <th>status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (requisition of requisitions; track requisition) {
+        <tr>
+          <td>{{ requisition?.unique_id }}</td>
+          <td>
+            {{ requisition.user?.first_name }} {{ requisition.user?.last_name }}
+          </td>
+          <td>{{ requisition?.division?.name }}</td>
+          <td>{{ requisition?.item }}</td>
+
+          <td>{{ requisition?.qty_required }}</td>
+
+          <td>
+            {{
+              requisition.created_at ? (requisition.created_at | timeago) : ""
+            }}
+          </td>
+
+          <td>
+            {{ requisition.status?.replaceAll("_", "    ").trim() }}
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if(count<=0) {
+  <div class="w-full h-[60vh]">
+    <div class="error h-full justify-center items-center flex-col flex">
+      <img src="assets/imgs/empty_state.svg" />
+      <h5 class="pt-4 text-red-400 capitalize">no requisition found</h5>
+    </div>
+  </div>
+  }
+</ng-container>
+
+<ng-container *ngIf="activePage === viewPages.STORE">
+  <div class="w-full overflow-x-auto px-4 pt-8" id="table">
+    <table class="items-center bg-transparent w-full border-collapse">
+      <thead>
+        <tr>
+          <th>reference number</th>
+          <th>staff</th>
+          <th>department</th>
+          <th>item</th>
+          <th>qty required</th>
+          <th>qty approved</th>
+
+          <th>date approved</th>
+
+          <th>status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (requisition of requisitions; track requisition) {
+        <tr>
+          <td>{{ requisition?.unique_id }}</td>
+          <td>
+            {{ requisition.user?.first_name }}
+            {{ requisition?.user?.last_name }}
+          </td>
+          <td>{{ requisition.division?.abbreviation.toUpperCase() }}</td>
+          <td>{{ requisition.item }}</td>
+          <td>{{ requisition.qty_required }}</td>
+          <td>{{ requisition.qty_approved }}</td>
+
+          <td>
+            {{
+              requisition.date_approved
+                ? (requisition.date_approved | timeago)
+                : ""
+            }}
+          </td>
+
+          <td>
+            {{ requisition.status?.replaceAll("_", "    ").trim() }}
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if(count<=0) {
+  <div class="w-full h-[60vh]">
+    <div class="error h-full justify-center items-center flex-col flex">
+      <img src="assets/imgs/empty_state.svg" />
+      <h5 class="pt-4 text-red-400 capitalize">no requisition found</h5>
+    </div>
+  </div>
+  }
+</ng-container>
+
+<ng-container *ngIf="activePage === viewPages.ISSUED">
+  <div class="w-full overflow-x-auto px-4 pt-8" id="table">
+    <table class="items-center bg-transparent w-full border-collapse">
+      <thead>
+        <tr>
+          <th>reference number</th>
+          <th>staff</th>
+          <th>department</th>
+          <th>item</th>
+          <th>qty required</th>
+          <th>qty issued</th>
+
+          <th>date issued</th>
+          <th>status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (requisition of requisitions; track requisition) {
+        <tr>
+          <td>{{ requisition?.unique_id }}</td>
+          <td>
+            {{ requisition?.user?.first_name }}
+            {{ requisition?.user?.last_name }}
+          </td>
+          <td>{{ requisition?.division?.abbreviation.toUpperCase() }}</td>
+          <td>{{ requisition?.item }}</td>
+          <td>{{ requisition?.qty_required }}</td>
+
+          <td>{{ requisition?.qty_issued }}</td>
+
+          <td>
+            {{
+              requisition?.date_issued
+                ? (requisition?.date_issued | timeago)
+                : ""
+            }}
+          </td>
+          <td>
+            {{ requisition?.status?.replaceAll("_", "    ").trim() }}
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if(count<=0) {
+  <div class="w-full h-[60vh]">
+    <div class="error h-full justify-center items-center flex-col flex">
+      <img src="assets/imgs/empty_state.svg" />
+      <h5 class="pt-4 text-red-400 capitalize">no requisition found</h5>
+    </div>
+  </div>
+  }
+</ng-container>

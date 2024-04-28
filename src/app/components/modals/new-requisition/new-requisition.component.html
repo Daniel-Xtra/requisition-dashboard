@@ -1,0 +1,125 @@
+<div
+  id="request-modal"
+  class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4"
+>
+  <div
+    class="top-0 right-2 bottom-0 left-2 m-auto h-max absolute shadow-xl rounded-md bg-white max-w-prose"
+  >
+    <div class="p-6 pt-0 text-center bg-[#F4F5F7]">
+      <div
+        class="flex capitalize py-4 justify-end gap-1 items-start cursor-pointer"
+        (click)="closeModal()"
+      >
+        close <img src="assets/icons/cross-circle.svg" alt="" />
+      </div>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-4 gap-x-6 gap-y-8 py-5">
+          <div class="col-span-4 sm:col-span-2 xl:col-span-2">
+            <label class="block capitalize text-left leading-6"
+              >department</label
+            >
+            <select
+              formControlName="division"
+              class="block w-full rounded-md border-0 px-2 py-2 mt-2 capitalize text-ash-200 shadow-sm ring-0 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+            >
+              <option
+                *ngFor="let department of departments"
+                value="{{ department?.slug }}"
+                class="capitalize"
+              >
+                {{ department.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-span-4 sm:col-span-2 xl:col-span-2">
+            <label class="block capitalize text-left leading-6">purpose</label>
+            <div class="mt-2">
+              <input
+                formControlName="purpose"
+                type="text"
+                class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="w-full" formArrayName="requests">
+          <div class="grid grid-cols-6 gap-x-6">
+            <div class="col-span-3 xl:col-span-4">
+              <label class="block capitalize text-left leading-6">item</label>
+            </div>
+            <div class="col-span-2 sm:col-span-2 xl:col-span-1">
+              <label class="block capitalize text-left leading-6"
+                >quantity</label
+              >
+            </div>
+            <div class="col-span-1 sm:col-span-1 xl:col-span-1">
+              <label class="block capitalize text-left leading-6"></label>
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-6 gap-x-6"
+            *ngFor="
+              let ingredientCtrl of addForm.get('requests')['controls'];
+              let i = index
+            "
+            [formGroupName]="i"
+          >
+            <div class="col-span-3 sm:col-span-3 xl:col-span-4">
+              <!-- <label class="block capitalize text-left leading-6">item</label> -->
+              <div class="mt-2">
+                <input
+                  type="text"
+                  formControlName="item"
+                  class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div class="col-span-2 sm:col-span-2 xl:col-span-1">
+              <!-- <label class="block capitalize text-left leading-6">quantity</label> -->
+              <div class="mt-2">
+                <input
+                  type="text"
+                  (keydown)="phoneKeyDown($event)"
+                  formControlName="qty_required"
+                  class="block w-full capitalize rounded-md border-0 py-1.5 px-2 text-ash-200 shadow-sm ring-0 placeholder:text-gray-400 focus:ring-0 outline-0 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div class="col-span-1 sm:col-span-1 xl:col-span-1">
+              <!-- <label class="block capitalize text-left leading-6"></label> -->
+              <div class="mt-2">
+                <button
+                  class="bg-red-500 px-4 py-1.5 text-white rounded-md"
+                  (click)="onDeleteItem(i)"
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-6 gap-x-6 pt-4">
+            <div class="col-span-3" *ngIf="length < 4">
+              <button
+                class="bg-blue-300 text-white capitalize rounded-md tracking-widest p-3 w-full"
+                type="button"
+                (click)="onAddItem()"
+              >
+                add item
+              </button>
+            </div>
+            <div class="col-span-3">
+              <button
+                class="bg-green-700 text-white capitalize rounded-md tracking-widest p-3 w-full"
+                type="submit"
+                [disabled]="!addForm.valid"
+              >
+                next
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
