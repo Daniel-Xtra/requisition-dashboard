@@ -1,7 +1,6 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
 import { NgOtpInputComponent, NgOtpInputConfig } from 'ng-otp-input';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
